@@ -19,10 +19,6 @@ module Setup
       system(command) || handle_command_failure(command)
     end
 
-    def check_os
-      check_platform("darwin", "This script is only compatible with macOS.")
-    end
-
     def check_application(application)
       unless system("#{application} --version")
         install_application(application)
@@ -113,27 +109,26 @@ module Setup
       exit
     end
 
-    def check_platform(platform, error_message)
-      unless RUBY_PLATFORM.include?(platform)
-        puts error_message
-        exit
-      end
-    end
-
     def install_application(application)
-      loop do
-        print "Would you like to install #{application} now? (y/n) "
-        answer = gets.chomp.downcase
-        case answer
-        when "y"
-          run_system_command("brew install #{application}")
-          break
-        when "n"
-          puts "Exiting..."
-          exit
-        else
-          puts "Invalid input. Please enter 'y' or 'n'."
+      if RUBY_PLATFORM.include?("darwin")
+        install_application_macos(application)
+        loop do
+          print "Would you like to install #{application} now? (y/n) "
+          answer = gets.chomp.downcase
+          case answer
+          when "y"
+            run_system_command("brew install #{application}")
+            break
+          when "n"
+            puts "Exiting..."
+            exit
+          else
+            puts "Invalid input. Please enter 'y' or 'n'."
+          end
         end
+      else
+        puts "Please install #{application} on this system."
+        exit
       end
     end
 
@@ -186,7 +181,6 @@ end
 
 Setup.display_section("Checking System Requirements")
 Setup.check_directory
-Setup.check_os
 Setup.check_git
 Setup.check_vagrant
 Setup.install_and_add_vagrant_aws_box
