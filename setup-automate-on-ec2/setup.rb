@@ -48,10 +48,9 @@ module Setup
       end
     end
 
-    def vagrant_up_and_ssh
-      puts "Running vagrant up and ssh..."
+    def vagrant_up
+      puts "Running vagrant up..."
       run_system_command("vagrant up")
-      run_system_command("vagrant ssh")
     end
 
     def check_directory
@@ -206,4 +205,8 @@ Setup.check_license_file
 Setup.foot_note("Files found.")
 
 Setup.display_section("Starting Vagrant")
-Setup.vagrant_up_and_ssh
+Setup.vagrant_up
+Setup.foot_note("Vagrant started.")
+
+puts "Setup complete."
+puts "Please run 'vagrant ssh' to ssh into the AWS EC2 instance."
