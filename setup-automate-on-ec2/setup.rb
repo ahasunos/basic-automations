@@ -1,7 +1,20 @@
 #!/usr/bin/env ruby
 
 module Setup
+  BORDER = '#' * 60
+
   class << self
+
+    def display_section(title)
+      puts BORDER
+      puts "# #{title.center(56)} #"
+      puts BORDER
+    end
+
+    def foot_note(foot_note)
+      puts "# #{foot_note.center(56)} #"
+    end
+
     def run_system_command(command)
       system(command) || handle_command_failure(command)
     end
@@ -24,10 +37,6 @@ module Setup
 
     def check_vagrant
       check_application("vagrant")
-    end
-
-    def check_aws_cli
-      check_application("aws")
     end
 
     def install_and_add_vagrant_aws_box
@@ -176,17 +185,25 @@ module Setup
   end
 end
 
-# Execution of setup functions...
+Setup.display_section("Checking System Requirements")
 Setup.check_directory
 Setup.check_os
 Setup.check_git
 Setup.check_vagrant
-Setup.check_aws_cli
 Setup.install_and_add_vagrant_aws_box
+Setup.foot_note("System requirements met.")
+
+Setup.display_section("Checking Environment Variables")
 Setup.check_aws_ssh_key_environment_variable
 Setup.check_aws_ssh_key_path_environment_variable
 Setup.check_github_token_environment_variable
 Setup.check_aws_ssh_profile_environment_variable
+Setup.foot_note("Environment variables set.")
+
+Setup.display_section("Checking Files")
 Setup.check_aws_credentials
 Setup.check_license_file
+Setup.foot_note("Files found.")
+
+Setup.display_section("Starting Vagrant")
 Setup.vagrant_up_and_ssh
