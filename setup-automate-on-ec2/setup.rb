@@ -100,7 +100,7 @@ module Setup
         puts "Found #{env_variable} environment variable."
       else
         puts "Did not find #{env_variable} environment variable."
-        prompt_environment_variable
+        prompt_environment_variable(env_variable)
       end
     end
 
